@@ -2,95 +2,80 @@ import requests,os
 from bs4 import BeautifulSoup
 import json
 import re
-
-books = [1661,
-        1342,
-        2701,
-        98,
-        11,
-        345,
-        84,
-        74,
-        768,
-        174]
-
+import roman
+import os
+import nltk
+import csv
+from nltk.corpus import stopwords
+nltk.download('stopwords')
 
 class Scraping:
 
     def __init__(self):
         pass
 
-
+    def lowerCase(text):
+        return text.lower()
     
+    def trim_extra_characters(input_string):
+        trimmed_string = re.sub(r'[^a-zA-Z0-9\s]', ' ', input_string)
+        trimmed_string = re.sub(r'\s+',' ', trimmed_string)
+        return trimmed_string
+    
+    def whitespace_tokenize(input_string):
+        temp_list = input_string.split(' ')
+        for each_word in temp_list:
+            if len(each_word)>0 and each_word!=' ':
+                pass
+            else:
+                temp_list.remove(each_word)
+        return temp_list
+    
+    def trim_stop_words(token_list):
+        stopwords_list = stopwords.words('english')
+        output_token_list = []
+        for word in token_list:
+            if word not in stopwords_list and len(word)>0:
+                output_token_list.append(word)
+        return output_token_list
 
-    def scrape_data(book_id):
-        url = 'https://www.gutenberg.org/ebooks/'+str(book_id)+'.txt.utf-8'
-        docs_file = os.path.join(os.path.dirname(__file__), '../static/')
-        response = requests.get(url)
-
-        # Check if the request was successful (status code 200)
-        if response.status_code == 200:
-            # Extract the text content
-            txt_content = response.text
-
-            title_pattern = re.compile(r'Title: (.+)', re.IGNORECASE)
-            author_pattern = re.compile(r'Author: (.+)', re.IGNORECASE)
-            release_date_pattern = re.compile(r'Release date: (.+)', re.IGNORECASE)
-            language_pattern = re.compile(r'Language: (.+)', re.IGNORECASE)
-            content_start_pattern =  re.compile(r'(?:Chapter|Letter)\s+\d+', re.IGNORECASE)
-
-            # Initialize variables to store extracted information
-            title, author, release_date, language, content = "", "", "", "", ""
-            in_content = False
-
-            for line in txt_content.splitlines():
-                # Check for metadata
-                title_match = title_pattern.match(line)
-                if title_match:
-                    title = title_match.group(1).strip()
-                    continue
-
-                author_match = author_pattern.match(line)
-                if author_match:
-                    author = author_match.group(1).strip()
-                    continue
-
-                release_date_match = release_date_pattern.match(line)
-                if release_date_match:
-                    release_date = release_date_match.group(1).strip().split('[')[0]
-                    continue
-
-                language_match = language_pattern.match(line)
-                if language_match:
-                    language = language_match.group(1).strip()
-                    continue
-
-                # Check for the start of content
-                content_start_match = content_start_pattern.match(line)
-                if content_start_match:
-                    in_content = True
-                    continue
-
-                # Append lines to content if in content section
-                if in_content:
-                    content += line + '\n'
-
-            content = content.strip()
-
-            data= {
-                'book_id': book_id,
-                'title': title,
-                'author': author,
-                'release_date': release_date,
-                'language': language,
-                'content': content,
-            }
-            with open(docs_file+title+'.json', 'w', encoding='utf-8') as file:
-                json.dump(data,file, indent=4)
-        pass
-
+    def extract_novel_texts(novel_text):
+        text_data = novel_text.split('\n')
+        tokens=[]
+        for each_line in text_data:
+            each_line = re.split(r'\t+', each_line.rstrip('\t'))
+            line =  each_line.rstrip('\n')
+            line = Scraping.lowerCase(line)
+            line = Scraping.trim_extra_characters(line)
+            tokenized_line = Scraping.whitespace_tokenize(line)
+            token_list = Scraping.trim_stop_words(tokenized_line)        
+            tokens.extend(token_list)
+        return tokens
 
     def initialize_scraping():
+        dataset=[["book_title","paragraph"]] 
+        folder_path = os.path.join(os.path.dirname(__file__), '../static/')
+        files = os.listdir(folder_path)
+        for file in files:
+            file = file.rstrip('.txt')
+            with open(folder_path+file+'.txt', 'r') as file_reader:
+                content = file_reader.read()
+            paragraphs = content.split('\n\n')
+            for paragraph in paragraphs:
+                paragraph = paragraph.strip()
+                paragraph = Scraping.trim_extra_characters(paragraph)
+                paragraph = Scraping.lowerCase(paragraph)
+                if len(paragraph)!=0:
+                    row = []
+                    row.append(file)
+                    row.append(paragraph)
+                    dataset.append(row)
         
-        for each_book in books:
-            Scraping.scrape_data(each_book)
+        csv_file_path = os.path.join(os.path.dirname(__file__), '../dataset.csv')
+        with open(csv_file_path, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            for row in dataset:
+                csv_writer.writerow(row)
+        pass
+                
+
