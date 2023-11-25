@@ -44,7 +44,7 @@ qa_chain = ConversationalRetrievalChain.from_llm(
 )
 
 # question
-question = "What is the book about?"
+question = "What are the names of the characters"
 
 # call QA chain
 response = qa_chain({"question": question})

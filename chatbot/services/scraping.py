@@ -8,6 +8,8 @@ import nltk
 import csv
 from nltk.corpus import stopwords
 from chatbot.services.classifier import Classifier
+from chatbot.services.retrieval import Retrieval
+from chatbot.services.data_loading import DataLoading
 nltk.download('stopwords')
 vectorizer,classifier = Classifier.define_classifier()
 novel_vectorizer,novel_classifier = Classifier.define_novel_classifier()
@@ -104,7 +106,10 @@ class Scraping:
             novel_user_input_tfidf = novel_vectorizer.transform([question])
             novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
             genre = novel_predicted_genre[0]
-            return genre
+            genre = DataLoading.to_snake_case(genre)
+            print(genre)
+            answer = Retrieval.generate_answer(question,genre)
+            return answer
         else:
             return predicted_genre[0]
         

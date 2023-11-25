@@ -38,4 +38,4 @@ class DataLoading:
         pass
         
                 
-DataLoading.load_data()
+# DataLoading.load_data()
