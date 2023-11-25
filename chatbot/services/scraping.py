@@ -9,6 +9,8 @@ import csv
 from nltk.corpus import stopwords
 from chatbot.services.classifier import Classifier
 nltk.download('stopwords')
+vectorizer,classifier = Classifier.define_classifier()
+novel_vectorizer,novel_classifier = Classifier.define_novel_classifier()
 
 class Scraping:
 
@@ -93,9 +95,18 @@ class Scraping:
             for row in classifier_dataset:
                 csv_writer.writerow(row)
         
-    def initialize_scraping():
+    def initialize_scraping(question):
         # Scraping.dataset_preparation()
-        Classifier.define_classifier()
-        pass
+        user_input_tfidf = vectorizer.transform([question])
+        predicted_genre = classifier.predict(user_input_tfidf)
+        print(predicted_genre[0])
+        if predicted_genre[0]=="novel":
+            novel_user_input_tfidf = novel_vectorizer.transform([question])
+            novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
+            genre = novel_predicted_genre[0]
+            return genre
+        else:
+            return predicted_genre[0]
+        
                 
 
