@@ -54,3 +54,10 @@ class Classifier:
         return vectorizer,classifier
 
 
+    def naive_bayes():
+        with open('/content/naive_bayes_model.pkl', 'rb') as file:
+            loaded_model = pickle.load(file)
+
+        # Loading the vectorizer
+        with open('/content/tfidf_vectorizer.pkl', 'rb') as file:
+            loaded_vectorizer = pickle.load(file)

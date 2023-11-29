@@ -10,9 +10,16 @@ from nltk.corpus import stopwords
 from chatbot.services.classifier import Classifier
 from chatbot.services.retrieval import Retrieval
 from chatbot.services.data_loading import DataLoading
+from chatbot.services.chitchat import Chitchat
 nltk.download('stopwords')
-vectorizer,classifier = Classifier.define_classifier()
+import pickle
+# vectorizer,classifier = Classifier.define_classifier()
 novel_vectorizer,novel_classifier = Classifier.define_novel_classifier()
+path = os.path.join(os.path.dirname(__file__), './naive_bayes/')
+with open(path+'naive_bayes_model.pkl', 'rb') as file:
+    loaded_model = pickle.load(file)
+with open(path+'naive_bayes_vectorizer.pkl', 'rb') as file:
+    loaded_vectorizer = pickle.load(file)
 
 class Scraping:
 
@@ -99,8 +106,11 @@ class Scraping:
         
     def initialize_scraping(question):
         # Scraping.dataset_preparation()
-        user_input_tfidf = vectorizer.transform([question])
-        predicted_genre = classifier.predict(user_input_tfidf)
+        # user_input_tfidf = vectorizer.transform([question])
+        # predicted_genre = classifier.predict(user_input_tfidf)
+        query_cleaned = question.replace("[^a-zA-Z]", " ").lower()
+        query_tfidf = loaded_vectorizer.transform([query_cleaned])
+        predicted_genre = loaded_model.predict(query_tfidf)
         print(predicted_genre[0])
         if predicted_genre[0]=="novel":
             novel_user_input_tfidf = novel_vectorizer.transform([question])
@@ -111,7 +121,8 @@ class Scraping:
             answer = Retrieval.generate_answer(question,genre)
             return answer
         else:
-            return predicted_genre[0]
+            response = Chitchat.chat(question)
+            return response
         
                 
 
