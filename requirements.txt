@@ -30,7 +30,6 @@ decorator==4.4.2
 Deprecated==1.2.14
 distlib==0.3.4
 distro==1.7.0
-distro-info===1.1build1
 exceptiongroup==1.2.0
 fastapi==0.104.1
 filelock==3.6.0
