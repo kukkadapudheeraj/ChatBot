@@ -6,6 +6,6 @@ app = create_app()
 if __name__ == '__main__':
    
    # Scraping.initialize_scraping()
-   app.run(host='127.0.0.1',port=9999)
+   app.run(host='127.0.0.1',port=9999,debug=True)
 
 
