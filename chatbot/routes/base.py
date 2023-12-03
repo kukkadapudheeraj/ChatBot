@@ -4,8 +4,8 @@ from flask_cors import cross_origin
 
 base = Blueprint('base',__name__)
 
-@cross_origin(supports_credentials=True)
 @base.route('/execute_query',methods=['GET', 'POST'])
+@cross_origin(supports_credentials=True)
 def index():
     if request.method == 'GET':
         return "Hello , Hope you are doing great... !! Please use POST method to get valid results"
