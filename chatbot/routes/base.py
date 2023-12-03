@@ -1,8 +1,10 @@
 from flask import Blueprint,request
 from chatbot.services.scraping import Scraping
+from flask_cors import cross_origin
 
 base = Blueprint('base',__name__)
 
+@cross_origin(supports_credentials=True)
 @base.route('/execute_query',methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
