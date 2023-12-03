@@ -13,5 +13,6 @@ def index():
         question = request.json["question"]
         query_type = request.json["query_type"]
         answer = Scraping.initialize_chatting(question,query_type)
-        return answer
+        response = {"answer":answer} 
+        return response
    
