@@ -104,16 +104,20 @@ class Scraping:
             for row in classifier_dataset:
                 csv_writer.writerow(row)
         
-    def initialize_chatting(question,query_type):
+    def initialize_chatting(question,query_type,novel_name):
 
         try:
             if query_type == "novel":
-                novel_user_input_tfidf = novel_vectorizer.transform([question])
-                novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
-                genre = novel_predicted_genre[0]
+                if novel_name=="":
+                    novel_user_input_tfidf = novel_vectorizer.transform([question])
+                    novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
+                    genre = novel_predicted_genre[0]
+                else:
+                    genre = novel_name
                 genre = DataLoading.to_snake_case(genre)
                 print(genre)
                 answer = Retrieval.generate_answer(question,genre)
+                answer = Scraping.trim_extra_characters(answer)
                 return answer
             elif query_type == "chitchat":
                 response = Chitchat.chat(question)
@@ -133,6 +137,7 @@ class Scraping:
                     genre = DataLoading.to_snake_case(genre)
                     print(genre)
                     answer = Retrieval.generate_answer(question,genre)
+                    answer = Scraping.trim_extra_characters(answer)
                     return answer
                 else:
                     response = Chitchat.chat(question)

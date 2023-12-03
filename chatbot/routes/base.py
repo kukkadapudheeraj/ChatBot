@@ -12,7 +12,8 @@ def index():
     elif request.method == 'POST':
         question = request.json["question"]
         query_type = request.json["query_type"]
-        answer = Scraping.initialize_chatting(question,query_type)
+        novel_name = request.json["novel_name"]
+        answer = Scraping.initialize_chatting(question,query_type,novel_name)
         response = {"answer":answer} 
         return response
    
