@@ -63,7 +63,7 @@ class Scraping:
             file = file.rstrip('.txt')
             with open(folder_path+file+'.txt', 'r') as file_reader:
                 content = file_reader.read()
-            paragraphs = content.split('\n\n')
+            paragraphs = content.split('\n')
             for paragraph in paragraphs:
                 paragraph = paragraph.strip()
                 paragraph = Scraping.trim_extra_characters(paragraph)
@@ -106,44 +106,48 @@ class Scraping:
         
     def initialize_chatting(question,query_type,novel_name):
 
-        try:
-            if query_type == "novel":
-                if novel_name=="":
-                    novel_user_input_tfidf = novel_vectorizer.transform([question])
-                    novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
-                    genre = novel_predicted_genre[0]
-                else:
-                    genre = novel_name
-                genre = DataLoading.to_snake_case(genre)
-                print(genre)
-                answer = Retrieval.generate_answer(question,genre)
-                answer = Scraping.trim_extra_characters(answer)
-                return answer
-            elif query_type == "chitchat":
-                response = Chitchat.chat(question)
-                return response
-            else:
-                # Scraping.dataset_preparation()
-                # user_input_tfidf = vectorizer.transform([question])
-                # predicted_genre = classifier.predict(user_input_tfidf)
-                query_cleaned = question.replace("[^a-zA-Z]", " ").lower()
-                query_tfidf = loaded_vectorizer.transform([query_cleaned])
-                predicted_genre = loaded_model.predict(query_tfidf)
-                print(predicted_genre[0])
-                if predicted_genre[0]=="novel":
-                    novel_user_input_tfidf = novel_vectorizer.transform([question])
-                    novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
-                    genre = novel_predicted_genre[0]
-                    genre = DataLoading.to_snake_case(genre)
-                    print(genre)
-                    answer = Retrieval.generate_answer(question,genre)
-                    answer = Scraping.trim_extra_characters(answer)
-                    return answer
-                else:
-                    response = Chitchat.chat(question)
-                    return response
-        except Exception as e:
-            pass
+        Scraping.dataset_preparation()
+
+        # try:
+        #     if query_type == "novel":
+        #         if novel_name=="":
+        #             novel_user_input_tfidf = novel_vectorizer.transform([question])
+        #             novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
+        #             genre = novel_predicted_genre[0]
+        #         else:
+        #             genre = novel_name
+        #         genre = DataLoading.to_snake_case(genre)
+        #         print(genre)
+        #         answer = Retrieval.generate_answer(question,genre)
+        #         answer = Scraping.trim_extra_characters(answer)
+        #         return answer
+        #     elif query_type == "chitchat":
+        #         response = Chitchat.chat(question)
+        #         return response
+        #     else:
+        #         # Scraping.dataset_preparation()
+        #         # user_input_tfidf = vectorizer.transform([question])
+        #         # predicted_genre = classifier.predict(user_input_tfidf)
+        #         query_cleaned = question.replace("[^a-zA-Z]", " ").lower()
+        #         query_tfidf = loaded_vectorizer.transform([query_cleaned])
+        #         predicted_genre = loaded_model.predict(query_tfidf)
+        #         print(predicted_genre[0])
+        #         if predicted_genre[0]=="novel":
+        #             novel_user_input_tfidf = novel_vectorizer.transform([question])
+        #             novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
+        #             genre = novel_predicted_genre[0]
+        #             genre = DataLoading.to_snake_case(genre)
+        #             print(genre)
+        #             answer = Retrieval.generate_answer(question,genre)
+        #             answer = Scraping.trim_extra_characters(answer)
+        #             return answer
+        #         else:
+        #             response = Chitchat.chat(question)
+        #             return response
+        # except Exception as e:
+        #     pass
+
+        return True
         
                 
 
