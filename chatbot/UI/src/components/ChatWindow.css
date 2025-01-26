@@ -1,0 +1,94 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  overflow-y: auto;
+  height: calc(100vh - 200px);
+}
+
+.message-bubble {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  max-width: 80%;
+}
+
+.message-text {
+  padding: 0 10px;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #888888;
+  color: BLACK;
+}
+
+.bot {
+  align-self: flex-start;
+  color: black;
+  border:1px solid black;
+}
+
+.bot-avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.message-bubble.user {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 15px;
+}
+
+.bot-avatar {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.loading-indicator {
+  font-style: italic;
+}
+
+.message-bubble.bot {
+  position: relative;
+}
+
+.star-rating {
+  position: absolute;
+  bottom: -25px;
+  left: 0;
+}
+
+.message-bubble.bot {
+
+}
+
+.star-rating {
+  display: block;
+  margin-top: 8px;
+}
+.star-rating {
+  display: block;
+  margin-top: 5px;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.star {
+  margin-right: 5px;
+}

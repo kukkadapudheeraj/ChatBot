@@ -1,0 +1,10 @@
+.legend {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: #F8F9FA;
+}
