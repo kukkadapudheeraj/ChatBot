@@ -25,15 +25,7 @@ class Classifier:
         classifier.fit(X_train_tfidf, y_train)
         predictions = classifier.predict(X_test_tfidf)
         accuracy = accuracy_score(y_test, predictions)
-        # print(f"Accuracy: {accuracy:.2f}")
-        # print("Classification Report:\n", classification_report(y_test, predictions))
         return vectorizer,classifier
-        # while True:
-        #     user_input = input("Enter a paragraph summary for book_title classification: ")
-        #     user_input_tfidf = vectorizer.transform([user_input])
-        #     predicted_genre = classifier.predict(user_input_tfidf)
-        #     print(f"Predicted Genre: {predicted_genre[0]}")
-        # pass
 
 
     def define_novel_classifier():
@@ -49,8 +41,6 @@ class Classifier:
         classifier.fit(X_train_tfidf, y_train)
         predictions = classifier.predict(X_test_tfidf)
         accuracy = accuracy_score(y_test, predictions)
-        # print(f"Accuracy: {accuracy:.2f}")
-        # print("Classification Report:\n", classification_report(y_test, predictions))
         return vectorizer,classifier
 
 

@@ -107,21 +107,24 @@ class Scraping:
     def initialize_chatting(question,query_type,novel_name):
 
         try:
+            topic_name = novel_name
             if query_type == "novel":
                 if novel_name=="":
                     novel_user_input_tfidf = novel_vectorizer.transform([question])
                     novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
                     genre = novel_predicted_genre[0]
+                    topic_name = genre
                 else:
                     genre = novel_name
                 genre = DataLoading.to_snake_case(genre)
                 print(genre)
                 answer = Retrieval.generate_answer(question,genre)
                 answer = Scraping.trim_extra_characters(answer)
-                return answer
+                return answer,topic_name
             elif query_type == "chitchat":
+                topic_name=query_type
                 response = Chitchat.chat(question)
-                return response
+                return response,topic_name
             else:
                 # Scraping.dataset_preparation()
                 # user_input_tfidf = vectorizer.transform([question])
@@ -134,14 +137,16 @@ class Scraping:
                     novel_user_input_tfidf = novel_vectorizer.transform([question])
                     novel_predicted_genre = novel_classifier.predict(novel_user_input_tfidf)
                     genre = novel_predicted_genre[0]
+                    topic_name = genre
                     genre = DataLoading.to_snake_case(genre)
                     print(genre)
                     answer = Retrieval.generate_answer(question,genre)
                     answer = Scraping.trim_extra_characters(answer)
-                    return answer
+                    return answer,topic_name
                 else:
+                    topic_name = "chitchat"
                     response = Chitchat.chat(question)
-                    return response
+                    return response,topic_name
         except Exception as e:
             pass
         

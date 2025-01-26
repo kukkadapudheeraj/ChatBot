@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Analysis</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: auto;
+            max-width: 800px; 
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center; 
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart {
+            width: 100%;  /* Adjust width as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>Query Length Vs Time</h1>
+    <div class="chart-container">
+        <img class="chart" src="{{ url_for('static', filename='images/query_length_vs_time.png')}}" alt="Line Chart">
+    </div>
+
+    <h1>Topic Vs Relevance</h1>
+    <div class="chart-container">
+        <img class="chart" src="{{ url_for('static', filename='images/topic_vs_relevance.png') }}" alt="Histogram">
+    </div>
+
+    <h1>Topic Vs Number Of Queries</h1>
+    <div class="chart-container">
+        <img class="chart" src="{{ url_for('static', filename='images/topic_vs_number_of_queries.png') }}" alt="Histogram">
+    </div>
+
+    <h1>Relevance Vs Non Relevance</h1>
+    <div class="chart-container">
+        <img class="chart" src="{{ url_for('static', filename='images/relevance_vs_non_relevance.png') }}" alt="Pie Chart">
+    </div>
+</body>
+</html>

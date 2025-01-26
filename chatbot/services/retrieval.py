@@ -23,7 +23,6 @@ class Retrieval:
             collection_name=genre,
             embedding_function=embedding_function,
         )
-        # create prompt
         QA_prompt = PromptTemplate(
             template="""Use the following pieces of context to answer the user question.
         chat_history: {chat_history}
@@ -32,15 +31,9 @@ class Retrieval:
         Answer:""",
             input_variables=["text", "question", "chat_history"]
         )
-
-        # create chat model
         llm = ChatOpenAI(openai_api_key=config("OPENAI_API_KEY"), temperature=0.6)
-
-        # create memory
         memory = ConversationBufferMemory(
             return_messages=True, memory_key="chat_history")
-
-        # create retriever chain
         qa_chain = ConversationalRetrievalChain.from_llm(
             llm=llm,
             memory=memory,
@@ -48,12 +41,5 @@ class Retrieval:
                 search_kwargs={'fetch_k': 4, 'k': 3}, search_type='mmr'),
             chain_type="refine",
         )
-
-        # call QA chain
         response = qa_chain({"question": question})
-
-
         return response["answer"]
-
-        # return {"status": "success"}
-        # return True
